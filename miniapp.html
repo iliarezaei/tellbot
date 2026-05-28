@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ایلیا رضایی | Ilia Rezaei</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0a1628;--card:#111f3a;--accent:#00c6a7;--accent2:#0084ff;
+--text:#e8edf5;--muted:#8a9bb5;--border:rgba(0,198,167,0.18);
+--red:#e05050;
+}
+body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.lang-toggle{display:flex;gap:0;border-radius:20px;overflow:hidden;border:1px solid var(--border);width:fit-content;margin:0 auto}
+.lang-btn{padding:6px 18px;font-family:'Vazirmatn',sans-serif;font-size:13px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted)}
+.lang-btn.active{background:var(--accent);color:#051014;font-weight:700}
+header{padding:1.5rem 1rem 1rem;text-align:center}
+.avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;margin:0 auto 0.75rem;color:#051014}
+h1{font-size:1.3rem;font-weight:700;margin-bottom:0.2rem}
+.tagline{font-size:0.85rem;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;gap:5px;background:rgba(0,198,167,0.12);border:1px solid rgba(0,198,167,0.3);color:var(--accent);font-size:0.78rem;padding:3px 10px;border-radius:100px;margin-top:0.5rem}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+nav{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.tab{padding:0.65rem 1.1rem;font-family:'Vazirmatn',sans-serif;font-size:0.85rem;border:none;background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.page{display:none;padding:1rem;animation:fadein .25s ease}
+.page.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:0.75rem}
+.skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem}
+.skill-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.75rem;text-align:center}
+.skill-icon{font-size:1.4rem;margin-bottom:0.4rem}
+.skill-name{font-size:0.82rem;font-weight:600}
+.skill-desc{font-size:0.72rem;color:var(--muted);margin-top:0.2rem}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:0.6rem;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;top:0;right:0;width:3px;height:100%;background:var(--accent)}
+.service-num{font-size:0.72rem;color:var(--accent);margin-bottom:0.3rem}
+.service-title{font-size:0.95rem;font-weight:600;margin-bottom:0.3rem}
+.service-desc{font-size:0.8rem;color:var(--muted);line-height:1.6}
+.form-group{margin-bottom:0.9rem}
+.form-group label{display:block;font-size:0.82rem;color:var(--muted);margin-bottom:0.35rem}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:#162035;border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.8rem;font-family:'Vazirmatn',sans-serif;font-size:0.88rem;color:var(--text);outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group select,.form-group textarea:focus{border-color:var(--accent)}
+.form-group select{appearance:none;cursor:pointer}
+.form-group textarea{resize:vertical;min-height:90px}
+.btn-submit{width:100%;padding:0.75rem;background:var(--accent);color:#051014;font-family:'Vazirmatn',sans-serif;font-size:0.95rem;font-weight:700;border:none;border-radius:8px;cursor:pointer;transition:all .2s}
+.btn-submit:hover{background:#00e0bb}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed}
+.success-msg{display:none;background:rgba(0,198,167,0.1);border:1px solid rgba(0,198,167,0.3);border-radius:10px;padding:1rem;text-align:center;color:var(--accent);font-size:0.9rem;margin-top:0.75rem}
+.error-msg{display:none;background:rgba(224,80,80,0.1);border:1px solid rgba(224,80,80,0.3);border-radius:10px;padding:0.75rem;color:var(--red);font-size:0.85rem;margin-bottom:0.75rem}
+.chat-wrap{display:flex;flex-direction:column;height:65vh;max-height:480px}
+.chat-messages{flex:1;overflow-y:auto;padding:0.75rem;display:flex;flex-direction:column;gap:0.5rem}
+.msg{max-width:85%;padding:0.6rem 0.85rem;border-radius:12px;font-size:0.85rem;line-height:1.6;word-break:break-word}
+.msg.user{align-self:flex-start;background:rgba(0,198,167,0.15);border:1px solid rgba(0,198,167,0.2);color:var(--text);border-radius:12px 12px 0 12px}
+.msg.bot{align-self:flex-end;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:12px 12px 12px 0}
+.msg.typing{opacity:.6}
+.chat-input-row{display:flex;gap:0.5rem;padding:0.75rem;border-top:1px solid var(--border)}
+.chat-input{flex:1;background:#162035;border:1px solid var(--border);border-radius:20px;padding:0.6rem 1rem;font-family:'Vazirmatn',sans-serif;font-size:0.88rem;color:var(--text);outline:none}
+.chat-input:focus{border-color:var(--accent)}
+.chat-send{background:var(--accent);border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:1.1rem;color:#051014;flex-shrink:0}
+.stat-row{display:flex;justify-content:space-around;padding:0.75rem 0}
+.stat{text-align:center}
+.stat-num{font-size:1.4rem;font-weight:700;color:var(--accent)}
+.stat-lbl{font-size:0.75rem;color:var(--muted);margin-top:0.1rem}
+.contact-btn{display:flex;align-items:center;gap:0.75rem;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0.85rem 1rem;margin-bottom:0.6rem;text-decoration:none;color:var(--text);transition:border-color .2s}
+.contact-btn:hover{border-color:var(--accent)}
+.contact-icon{font-size:1.3rem;flex-shrink:0}
+.contact-info .clabel{font-size:0.75rem;color:var(--muted)}
+.contact-info .cval{font-size:0.9rem;font-weight:500}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="avatar">IR</div>
+  <h1 id="h-name">ایلیا رضایی</h1>
+  <p class="tagline" id="h-tag">متخصص شبکه و زیرساخت IT — یزد، ایران</p>
+  <div class="badge"><span class="dot"></span><span id="h-badge">آماده همکاری</span></div>
+  <br>
+  <div class="lang-toggle" style="margin-top:0.75rem">
+    <button class="lang-btn active" onclick="setLang('fa')">فارسی</button>
+    <button class="lang-btn" onclick="setLang('en')">English</button>
+  </div>
+</header>
+
+<nav>
+  <button class="tab active" onclick="showTab('about')" id="tab-about">درباره</button>
+  <button class="tab" onclick="showTab('skills')" id="tab-skills">مهارت‌ها</button>
+  <button class="tab" onclick="showTab('services')" id="tab-services">خدمات</button>
+  <button class="tab" onclick="showTab('chat')" id="tab-chat">چت AI</button>
+  <button class="tab" onclick="showTab('contact')" id="tab-contact">تماس</button>
+</nav>
+
+<div class="page active" id="page-about">
+  <div class="stat-row">
+    <div class="stat"><div class="stat-num">۱.۵+</div><div class="stat-lbl" id="s1">سال تجربه</div></div>
+    <div class="stat"><div class="stat-num">۶+</div><div class="stat-lbl" id="s2">حوزه تخصصی</div></div>
+    <div class="stat"><div class="stat-num">۱۸</div><div class="stat-lbl" id="s3">سال سن</div></div>
+  </div>
+  <div class="card">
+    <p id="about-text" style="font-size:0.88rem;line-height:1.9;color:var(--muted)">
+      یک متخصص جوان و پرانگیزه در حوزه شبکه و زیرساخت IT هستم. از یزد، ایران، با بیش از یک‌ونیم سال تجربه عملی در راه‌اندازی و مدیریت شبکه‌های کوچک و متوسط. عاشق لینوکس هستم و به دنبال یادگیری مداوم در دنیای فناوری.
+    </p>
+  </div>
+  <div class="card">
+    <div style="display:flex;flex-direction:column;gap:0.6rem">
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;border-bottom:1px solid var(--border);padding-bottom:0.5rem">
+        <span style="color:var(--muted)" id="l-city">شهر</span><span style="color:var(--accent)">یزد، ایران</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;border-bottom:1px solid var(--border);padding-bottom:0.5rem">
+        <span style="color:var(--muted)" id="l-age">سن</span><span style="color:var(--accent)" id="v-age">۱۸ سال</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem;border-bottom:1px solid var(--border);padding-bottom:0.5rem">
+        <span style="color:var(--muted)" id="l-exp">تجربه</span><span style="color:var(--accent)">۱.۵+ سال</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.85rem">
+        <span style="color:var(--muted)" id="l-status">وضعیت</span><span style="color:var(--accent)" id="v-status">آماده پروژه جدید</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-skills">
+  <div class="skill-grid">
+    <div class="skill-item"><div class="skill-icon">🐧</div><div class="skill-name">Linux</div><div class="skill-desc" id="sk1">Ubuntu · Debian · CentOS</div></div>
+    <div class="skill-item"><div class="skill-icon">🖥️</div><div class="skill-name" id="sk2n">ویندوز سرور</div><div class="skill-desc" id="sk2">AD · DNS · DHCP</div></div>
+    <div class="skill-item"><div class="skill-icon">📡</div><div class="skill-name" id="sk3n">شبکه پسیو</div><div class="skill-desc" id="sk3">Cat5e · Cat6 · پچ‌پنل</div></div>
+    <div class="skill-item"><div class="skill-icon">🔁</div><div class="skill-name">MikroTik</div><div class="skill-desc" id="sk4">RouterOS · Winbox · NAT</div></div>
+    <div class="skill-item"><div class="skill-icon">🔶</div><div class="skill-name">Cisco</div><div class="skill-desc" id="sk5">IOS · VLAN · STP</div></div>
+    <div class="skill-item"><div class="skill-icon">📷</div><div class="skill-name">CCTV</div><div class="skill-desc" id="sk6">IP · Analog · NVR/DVR</div></div>
+  </div>
+</div>
+
+<div class="page" id="page-services">
+  <div class="service-card"><div class="service-num">01</div><div class="service-title" id="sv1t">راه‌اندازی شبکه اداری</div><div class="service-desc" id="sv1d">طراحی، پیاده‌سازی و پشتیبانی شبکه با MikroTik یا Cisco</div></div>
+  <div class="service-card"><div class="service-num">02</div><div class="service-title" id="sv2t">نصب سیستم CCTV</div><div class="service-desc" id="sv2d">نصب دوربین IP و آنالوگ، تنظیم NVR و دسترسی از راه دور</div></div>
+  <div class="service-card"><div class="service-num">03</div><div class="service-title" id="sv3t">مدیریت سرور لینوکس</div><div class="service-desc" id="sv3d">نصب، پیکربندی و امنیت‌سازی سرورهای لینوکسی</div></div>
+  <div class="service-card"><div class="service-num">04</div><div class="service-title" id="sv4t">ویندوز سرور</div><div class="service-desc" id="sv4d">راه‌اندازی دامنه، Active Directory و مدیریت کاربران</div></div>
+  <div class="service-card"><div class="service-num">05</div><div class="service-title" id="sv5t">کابل‌کشی ساختارمند</div><div class="service-desc" id="sv5d">اجرای کابل‌کشی، پچ‌پنل و داکت‌کشی حرفه‌ای</div></div>
+  <div class="service-card"><div class="service-num">06</div><div class="service-title" id="sv6t">عیب‌یابی شبکه</div><div class="service-desc" id="sv6d">تشخیص و رفع مشکلات شبکه حضوری یا از راه دور</div></div>
+</div>
+
+<div class="page" id="page-chat">
+  <div class="chat-wrap">
+    <div class="chat-messages" id="chat-messages">
+      <div class="msg bot" id="bot-welcome">سلام! من دستیار هوشمند ایلیا هستم. سوالت درباره شبکه، لینوکس یا خدمات رو بپرس 👋</div>
+    </div>
+    <div class="chat-input-row">
+      <input class="chat-input" id="chat-input" placeholder="پیامت را بنویس..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-contact">
+  <div id="err-msg" class="error-msg"></div>
+  <div class="form-group">
+    <label id="fl-name">نام شما *</label>
+    <input type="text" id="f-name" placeholder="ایلیا رضایی">
+  </div>
+  <div class="form-group">
+    <label id="fl-phone">شماره تلفن</label>
+    <input type="tel" id="f-phone" placeholder="09123456789">
+  </div>
+  <div class="form-group">
+    <label id="fl-service">نوع خدمت</label>
+    <select id="f-service">
+      <option value="" id="so0">انتخاب کنید...</option>
+      <option value="شبکه اداری" id="so1">راه‌اندازی شبکه</option>
+      <option value="CCTV" id="so2">نصب CCTV</option>
+      <option value="سرور لینوکس" id="so3">سرور لینوکس</option>
+      <option value="ویندوز سرور" id="so4">ویندوز سرور</option>
+      <option value="کابل‌کشی" id="so5">کابل‌کشی</option>
+      <option value="پشتیبانی" id="so6">پشتیبانی</option>
+      <option value="سایر" id="so7">سایر</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label id="fl-msg">توضیحات پروژه *</label>
+    <textarea id="f-message" placeholder="درباره پروژه‌ات بنویس..."></textarea>
+  </div>
+  <button class="btn-submit" id="submit-btn" onclick="submitForm()">
+    <span id="btn-text">ارسال درخواست</span>
+  </button>
+  <div class="success-msg" id="success-msg">✅ پیام شما ارسال شد! ایلیا به زودی پاسخ می‌دهد.</div>
+</div>
+
+<script>
+let currentLang = 'fa';
+const strings = {
+  fa:{
+    name:'ایلیا رضایی', tag:'متخصص شبکه و زیرساخت IT — یزد، ایران', badge:'آماده همکاری',
+    tabs:['درباره','مهارت‌ها','خدمات','چت AI','تماس'],
+    s1:'سال تجربه',s2:'حوزه تخصصی',s3:'سال سن',
+    about:'یک متخصص جوان و پرانگیزه در حوزه شبکه و زیرساخت IT هستم. از یزد، ایران، با بیش از یک‌ونیم سال تجربه عملی در راه‌اندازی و مدیریت شبکه‌های کوچک و متوسط. عاشق لینوکس هستم و به دنبال یادگیری مداوم در دنیای فناوری.',
+    lCity:'شهر',lAge:'سن',vAge:'۱۸ سال',lExp:'تجربه',lStatus:'وضعیت',vStatus:'آماده پروژه جدید',
+    sk2n:'ویندوز سرور',sk3n:'شبکه پسیو',sk4:'RouterOS · Winbox · NAT',sk5:'IOS · VLAN · STP',sk6:'IP · آنالوگ · NVR/DVR',
+    sv1t:'راه‌اندازی شبکه اداری',sv1d:'طراحی، پیاده‌سازی و پشتیبانی شبکه با MikroTik یا Cisco',
+    sv2t:'نصب سیستم CCTV',sv2d:'نصب دوربین IP و آنالوگ، تنظیم NVR و دسترسی از راه دور',
+    sv3t:'مدیریت سرور لینوکس',sv3d:'نصب، پیکربندی و امنیت‌سازی سرورهای لینوکسی',
+    sv4t:'ویندوز سرور',sv4d:'راه‌اندازی دامنه، Active Directory و مدیریت کاربران',
+    sv5t:'کابل‌کشی ساختارمند',sv5d:'اجرای کابل‌کشی، پچ‌پنل و داکت‌کشی حرفه‌ای',
+    sv6t:'عیب‌یابی شبکه',sv6d:'تشخیص و رفع مشکلات شبکه حضوری یا از راه دور',
+    chatWelcome:'سلام! من دستیار هوشمند ایلیا هستم. سوالت درباره شبکه، لینوکس یا خدمات رو بپرس 👋',
+    chatPlaceholder:'پیامت را بنویس...',chatTyping:'در حال تایپ...',
+    flName:'نام شما *',flPhone:'شماره تلفن',flService:'نوع خدمت',flMsg:'توضیحات پروژه *',
+    so0:'انتخاب کنید...',so1:'راه‌اندازی شبکه',so2:'نصب CCTV',so3:'سرور لینوکس',so4:'ویندوز سرور',so5:'کابل‌کشی',so6:'پشتیبانی',so7:'سایر',
+    btnText:'ارسال درخواست',successMsg:'✅ پیام شما ارسال شد! ایلیا به زودی پاسخ می‌دهد.',
+    errRequired:'لطفاً نام و توضیحات را پر کنید.',errFail:'خطا در ارسال. دوباره امتحان کن.',
+    dir:'rtl'
+  },
+  en:{
+    name:'Ilia Rezaei', tag:'Network & IT Infrastructure Specialist — Yazd, Iran', badge:'Available for work',
+    tabs:['About','Skills','Services','AI Chat','Contact'],
+    s1:'Years exp.',s2:'Specialties',s3:'Age',
+    about:'A young and motivated IT specialist from Yazd, Iran, with 1.5+ years of hands-on experience in setting up and managing small to medium networks. Passionate about Linux and always learning.',
+    lCity:'City',lAge:'Age',vAge:'18 years',lExp:'Experience',lStatus:'Status',vStatus:'Ready for projects',
+    sk2n:'Windows Server',sk3n:'Passive Network',sk4:'RouterOS · Winbox · NAT',sk5:'IOS · VLAN · STP',sk6:'IP · Analog · NVR/DVR',
+    sv1t:'Office Network Setup',sv1d:'Design, deploy and support networks with MikroTik or Cisco',
+    sv2t:'CCTV Installation',sv2d:'Install IP & analog cameras, configure NVR and remote access',
+    sv3t:'Linux Server Management',sv3d:'Install, configure and secure Linux servers',
+    sv4t:'Windows Server',sv4d:'Domain setup, Active Directory and user management',
+    sv5t:'Structured Cabling',sv5d:'Professional cable runs, patch panels and duct installation',
+    sv6t:'Network Troubleshooting',sv6d:'Diagnose and fix network issues on-site or remotely',
+    chatWelcome:"Hi! I'm Ilia's smart assistant. Ask me about networking, Linux or his services 👋",
+    chatPlaceholder:'Type your message...',chatTyping:'Typing...',
+    flName:'Your Name *',flPhone:'Phone Number',flService:'Service Type',flMsg:'Project Details *',
+    so0:'Select...',so1:'Network Setup',so2:'CCTV Install',so3:'Linux Server',so4:'Windows Server',so5:'Cabling',so6:'Support',so7:'Other',
+    btnText:'Send Request',successMsg:'✅ Message sent! Ilia will reply soon.',
+    errRequired:'Please fill in name and project details.',errFail:'Send failed. Please try again.',
+    dir:'ltr'
+  }
+};
+
+function setLang(lang){
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.includes(lang==='fa'?'ف':'E')));
+  const s = strings[lang];
+  document.documentElement.setAttribute('lang', lang==='fa'?'fa':'en');
+  document.documentElement.setAttribute('dir', s.dir);
+  document.getElementById('h-name').textContent = s.name;
+  document.getElementById('h-tag').textContent = s.tag;
+  document.getElementById('h-badge').textContent = s.badge;
+  const tabs = ['about','skills','services','chat','contact'];
+  tabs.forEach((t,i)=>document.getElementById('tab-'+t).textContent=s.tabs[i]);
+  document.getElementById('s1').textContent=s.s1;
+  document.getElementById('s2').textContent=s.s2;
+  document.getElementById('s3').textContent=s.s3;
+  document.getElementById('about-text').textContent=s.about;
+  document.getElementById('l-city').textContent=s.lCity;
+  document.getElementById('l-age').textContent=s.lAge;
+  document.getElementById('v-age').textContent=s.vAge;
+  document.getElementById('l-exp').textContent=s.lExp;
+  document.getElementById('l-status').textContent=s.lStatus;
+  document.getElementById('v-status').textContent=s.vStatus;
+  document.getElementById('sk2n').textContent=s.sk2n;
+  document.getElementById('sk3n').textContent=s.sk3n;
+  ['sv1t','sv1d','sv2t','sv2d','sv3t','sv3d','sv4t','sv4d','sv5t','sv5d','sv6t','sv6d'].forEach(id=>document.getElementById(id).textContent=s[id]);
+  document.getElementById('bot-welcome').textContent=s.chatWelcome;
+  document.getElementById('chat-input').placeholder=s.chatPlaceholder;
+  document.getElementById('fl-name').textContent=s.flName;
+  document.getElementById('fl-phone').textContent=s.flPhone;
+  document.getElementById('fl-service').textContent=s.flService;
+  document.getElementById('fl-msg').textContent=s.flMsg;
+  ['so0','so1','so2','so3','so4','so5','so6','so7'].forEach(id=>document.getElementById(id).textContent=s[id]);
+  document.getElementById('btn-text').textContent=s.btnText;
+}
+
+function showTab(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+async function sendChat(){
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if(!msg) return;
+  input.value='';
+  const msgs = document.getElementById('chat-messages');
+  const userDiv = document.createElement('div');
+  userDiv.className='msg user'; userDiv.textContent=msg;
+  msgs.appendChild(userDiv);
+  const typingDiv = document.createElement('div');
+  typingDiv.className='msg bot typing';
+  typingDiv.textContent = strings[currentLang].chatTyping;
+  msgs.appendChild(typingDiv);
+  msgs.scrollTop=msgs.scrollHeight;
+  try{
+    const r = await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,lang:currentLang})});
+    const data = await r.json();
+    typingDiv.className='msg bot';
+    typingDiv.textContent = data.reply || '⚠️ خطا';
+  }catch(e){
+    typingDiv.textContent='⚠️ خطا در اتصال';
+  }
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+async function submitForm(){
+  const s = strings[currentLang];
+  const name = document.getElementById('f-name').value.trim();
+  const msg  = document.getElementById('f-message').value.trim();
+  const errEl = document.getElementById('err-msg');
+  errEl.style.display='none';
+  if(!name||!msg){errEl.textContent=s.errRequired;errEl.style.display='block';return;}
+  const btn = document.getElementById('submit-btn');
+  btn.disabled=true;
+  document.getElementById('btn-text').textContent='...';
+  try{
+    const r = await fetch('/api/contact',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        name,phone:document.getElementById('f-phone').value,
+        service:document.getElementById('f-service').value,
+        message:msg,lang:currentLang
+      })
+    });
+    const data = await r.json();
+    if(data.ok){
+      document.getElementById('success-msg').style.display='block';
+      document.getElementById('success-msg').textContent=s.successMsg;
+      btn.style.display='none';
+    }else{errEl.textContent=s.errFail;errEl.style.display='block';btn.disabled=false;document.getElementById('btn-text').textContent=s.btnText;}
+  }catch(e){
+    errEl.textContent=s.errFail;errEl.style.display='block';
+    btn.disabled=false;document.getElementById('btn-text').textContent=s.btnText;
+  }
+}
+
+if(window.Telegram&&window.Telegram.WebApp){
+  window.Telegram.WebApp.ready();
+  window.Telegram.WebApp.expand();
+}
+</script>
+</body>
+</html>
